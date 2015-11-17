@@ -1,0 +1,2 @@
+--with-libbind-libs=%{_libdir}
+--with-libbind=%{_includedir}/bind9
