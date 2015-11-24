@@ -4,13 +4,15 @@
 #
 Name     : dhcp
 Version  : 4.3.3
-Release  : 1
+Release  : 2
 URL      : https://ftp.isc.org/isc/dhcp/4.3.3/dhcp-4.3.3.tar.gz
 Source0  : https://ftp.isc.org/isc/dhcp/4.3.3/dhcp-4.3.3.tar.gz
+Source1  : dhcp4.service
 Summary  : The Internet Systems Consortium (ISC) DHCP server
 Group    : Development/Tools
-License  : BSD-3-Clause ISC
+License  : ISC
 Requires: dhcp-bin
+Requires: dhcp-config
 Requires: dhcp-lib
 Requires: dhcp-doc
 BuildRequires : automake
@@ -36,9 +38,18 @@ putting all of the configuration into one place.
 %package bin
 Summary: bin components for the dhcp package.
 Group: Binaries
+Requires: dhcp-config
 
 %description bin
 bin components for the dhcp package.
+
+
+%package config
+Summary: config components for the dhcp package.
+Group: Default
+
+%description config
+config components for the dhcp package.
 
 
 %package dev
@@ -63,6 +74,7 @@ doc components for the dhcp package.
 %package lib
 Summary: lib components for the dhcp package.
 Group: Libraries
+Requires: dhcp-config
 
 %description lib
 lib components for the dhcp package.
@@ -87,6 +99,8 @@ make VERBOSE=1 V=1 %{?_smp_mflags} check
 %install
 rm -rf %{buildroot}
 %make_install
+mkdir -p %{buildroot}/usr/lib/systemd/system
+install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/dhcp4.service
 
 %files
 %defattr(-,root,root,-)
@@ -97,6 +111,10 @@ rm -rf %{buildroot}
 /usr/bin/dhcpd
 /usr/bin/dhcrelay
 /usr/bin/omshell
+
+%files config
+%defattr(-,root,root,-)
+/usr/lib/systemd/system/dhcp4.service
 
 %files dev
 %defattr(-,root,root,-)
