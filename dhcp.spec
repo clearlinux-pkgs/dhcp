@@ -4,7 +4,7 @@
 #
 Name     : dhcp
 Version  : 4.3.3
-Release  : 6
+Release  : 7
 URL      : https://ftp.isc.org/isc/dhcp/4.3.3-P1/dhcp-4.3.3-P1.tar.gz
 Source0  : https://ftp.isc.org/isc/dhcp/4.3.3-P1/dhcp-4.3.3-P1.tar.gz
 Source1  : dhcp4.service
@@ -28,6 +28,7 @@ BuildRequires : pkg-config-dev
 Patch1: 0001-Allow-use-of-external-bind.patch
 Patch2: 0002-Use-libtool-to-build-dynamic-libraries.patch
 Patch3: cve-2015-8605.nopatch
+Patch4: cve-2016-2774.patch
 
 %description
 Dhcp includes the DHCP server which is used for dynamically configuring
@@ -85,6 +86,7 @@ lib components for the dhcp package.
 %setup -q -n dhcp-4.3.3-P1
 %patch1 -p1
 %patch2 -p1
+%patch4 -p1
 
 %build
 %reconfigure --disable-static --with-libbind-libs=%{_libdir} \
