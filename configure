@@ -1,2 +1,2 @@
---with-libbind-libs=%{_libdir}
---with-libbind=%{_includedir}/bind9
+--with-libbind-libs=/usr/lib64
+--with-libbind=/usr/include/bind9
