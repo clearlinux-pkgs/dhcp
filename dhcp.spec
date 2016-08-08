@@ -4,7 +4,7 @@
 #
 Name     : dhcp
 Version  : 4.3.3
-Release  : 9
+Release  : 10
 URL      : https://ftp.isc.org/isc/dhcp/4.3.3-P1/dhcp-4.3.3-P1.tar.gz
 Source0  : https://ftp.isc.org/isc/dhcp/4.3.3-P1/dhcp-4.3.3-P1.tar.gz
 Source1  : dhcp4.service
@@ -89,11 +89,13 @@ lib components for the dhcp package.
 %patch4 -p1
 
 %build
-%reconfigure --disable-static --with-libbind-libs=%{_libdir} \
---with-libbind=%{_includedir}/bind9
+export LANG=C
+%reconfigure --disable-static --with-libbind-libs=/usr/lib64 \
+--with-libbind=/usr/include/bind9
 make V=1  %{?_smp_mflags}
 
 %check
+export LANG=C
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost
