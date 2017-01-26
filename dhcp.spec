@@ -5,33 +5,19 @@
 # Source0 file verified with key 0x6FA6EBC9911A4C02 (codesign@isc.org)
 #
 Name     : dhcp
-Version  : 4.3.3
-Release  : 13
-URL      : https://ftp.isc.org/isc/dhcp/4.3.3-P1/dhcp-4.3.3-P1.tar.gz
-Source0  : https://ftp.isc.org/isc/dhcp/4.3.3-P1/dhcp-4.3.3-P1.tar.gz
+Version  : 4.3.5
+Release  : 15
+URL      : https://ftp.isc.org/isc/dhcp/4.3.5/dhcp-4.3.5.tar.gz
+Source0  : https://ftp.isc.org/isc/dhcp/4.3.5/dhcp-4.3.5.tar.gz
 Source1  : dhcp4.service
-Source99 : https://ftp.isc.org/isc/dhcp/4.3.3-P1/dhcp-4.3.3-P1.tar.gz.asc
+Source99 : https://ftp.isc.org/isc/dhcp/4.3.5/dhcp-4.3.5.tar.gz.asc
 Summary  : The Internet Systems Consortium (ISC) DHCP server
 Group    : Development/Tools
 License  : ISC
 Requires: dhcp-bin
 Requires: dhcp-config
-Requires: dhcp-lib
 Requires: dhcp-doc
-BuildRequires : automake
-BuildRequires : automake-dev
-BuildRequires : bind-utils-dev
-BuildRequires : bind-utils-lib
-BuildRequires : gettext-bin
 BuildRequires : iproute2
-BuildRequires : libtool
-BuildRequires : libtool-dev
-BuildRequires : m4
-BuildRequires : pkg-config-dev
-Patch1: 0001-Allow-use-of-external-bind.patch
-Patch2: 0002-Use-libtool-to-build-dynamic-libraries.patch
-Patch3: cve-2015-8605.nopatch
-Patch4: cve-2016-2774.patch
 
 %description
 Dhcp includes the DHCP server which is used for dynamically configuring
@@ -60,7 +46,6 @@ config components for the dhcp package.
 %package dev
 Summary: dev components for the dhcp package.
 Group: Development
-Requires: dhcp-lib
 Requires: dhcp-bin
 Provides: dhcp-devel
 
@@ -76,36 +61,24 @@ Group: Documentation
 doc components for the dhcp package.
 
 
-%package lib
-Summary: lib components for the dhcp package.
-Group: Libraries
-Requires: dhcp-config
-
-%description lib
-lib components for the dhcp package.
-
-
 %prep
-%setup -q -n dhcp-4.3.3-P1
-%patch1 -p1
-%patch2 -p1
-%patch4 -p1
+%setup -q -n dhcp-4.3.5
 
 %build
 export LANG=C
-export SOURCE_DATE_EPOCH=1484596846
-%reconfigure --disable-static --with-libbind-libs=/usr/lib64 \
---with-libbind=/usr/include/bind9
-make V=1  %{?_smp_mflags}
+export SOURCE_DATE_EPOCH=1485475501
+%configure --disable-static
+make V=1
 
 %check
 export LANG=C
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost
-make VERBOSE=1 V=1 %{?_smp_mflags} check
+make VERBOSE=1 V=1 check
 
 %install
+export SOURCE_DATE_EPOCH=1485475501
 rm -rf %{buildroot}
 %make_install
 mkdir -p %{buildroot}/usr/lib/systemd/system
@@ -138,8 +111,6 @@ install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/dhcp4.service
 /usr/include/omapip/omapip_p.h
 /usr/include/omapip/result.h
 /usr/include/omapip/trace.h
-/usr/lib64/libdhcpctl.so
-/usr/lib64/libomapi.so
 
 %files doc
 %defattr(-,root,root,-)
@@ -147,10 +118,3 @@ install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/dhcp4.service
 %doc /usr/share/man/man3/*
 %doc /usr/share/man/man5/*
 %doc /usr/share/man/man8/*
-
-%files lib
-%defattr(-,root,root,-)
-/usr/lib64/libdhcpctl.so.0
-/usr/lib64/libdhcpctl.so.0.0.0
-/usr/lib64/libomapi.so.0
-/usr/lib64/libomapi.so.0.0.0
