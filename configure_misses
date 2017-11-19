@@ -1,0 +1,6 @@
+Configure miss: struct lifnum
+Configure miss: struct if_laddrconf
+Configure miss: struct if_laddrreq
+Configure miss: net/if6.h usability
+Configure miss: net/if6.h presence
+Configure miss: net/if6.h
