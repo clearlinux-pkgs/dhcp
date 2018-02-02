@@ -6,7 +6,7 @@
 #
 Name     : dhcp
 Version  : 4.3.6
-Release  : 17
+Release  : 18
 URL      : https://ftp.isc.org/isc/dhcp/4.3.6/dhcp-4.3.6.tar.gz
 Source0  : https://ftp.isc.org/isc/dhcp/4.3.6/dhcp-4.3.6.tar.gz
 Source1  : dhcp4.service
