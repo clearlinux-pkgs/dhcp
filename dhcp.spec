@@ -5,12 +5,12 @@
 # Source0 file verified with key 0xF1B11BF05CF02E57 (codesign@isc.org)
 #
 Name     : dhcp
-Version  : 4.3.6
-Release  : 18
-URL      : https://ftp.isc.org/isc/dhcp/4.3.6/dhcp-4.3.6.tar.gz
-Source0  : https://ftp.isc.org/isc/dhcp/4.3.6/dhcp-4.3.6.tar.gz
+Version  : 4.4.0
+Release  : 19
+URL      : https://ftp.isc.org/isc/dhcp/4.4.0/dhcp-4.4.0.tar.gz
+Source0  : https://ftp.isc.org/isc/dhcp/4.4.0/dhcp-4.4.0.tar.gz
 Source1  : dhcp4.service
-Source99 : https://ftp.isc.org/isc/dhcp/4.3.6/dhcp-4.3.6.tar.gz.asc
+Source99 : https://ftp.isc.org/isc/dhcp/4.4.0/dhcp-4.4.0.tar.gz.asc
 Summary  : The Internet Systems Consortium (ISC) DHCP server
 Group    : Development/Tools
 License  : ISC
@@ -62,14 +62,14 @@ doc components for the dhcp package.
 
 
 %prep
-%setup -q -n dhcp-4.3.6
+%setup -q -n dhcp-4.4.0
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1511128992
+export SOURCE_DATE_EPOCH=1517679044
 %configure --disable-static
 make
 
@@ -81,7 +81,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 check
 
 %install
-export SOURCE_DATE_EPOCH=1511128992
+export SOURCE_DATE_EPOCH=1517679044
 rm -rf %{buildroot}
 %make_install
 mkdir -p %{buildroot}/usr/lib/systemd/system
@@ -104,7 +104,6 @@ install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/dhcp4.service
 %files dev
 %defattr(-,root,root,-)
 /usr/include/dhcpctl/dhcpctl.h
-/usr/include/isc-dhcp/dst.h
 /usr/include/omapip/alloc.h
 /usr/include/omapip/buffer.h
 /usr/include/omapip/convert.h

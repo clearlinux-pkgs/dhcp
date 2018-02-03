@@ -1,5 +1,5 @@
 PKG_NAME := dhcp
-URL = https://ftp.isc.org/isc/dhcp/4.3.6/dhcp-4.3.6.tar.gz
-
+URL = https://ftp.isc.org/isc/dhcp/4.4.0/dhcp-4.4.0.tar.gz
+ARCHIVES = 
 
 include ../common/Makefile.common
