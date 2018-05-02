@@ -5,15 +5,15 @@
 # Source0 file verified with key 0xF1B11BF05CF02E57 (codesign@isc.org)
 #
 Name     : dhcp
-Version  : 4.4.0
-Release  : 19
-URL      : https://ftp.isc.org/isc/dhcp/4.4.0/dhcp-4.4.0.tar.gz
-Source0  : https://ftp.isc.org/isc/dhcp/4.4.0/dhcp-4.4.0.tar.gz
+Version  : 4.4.1
+Release  : 20
+URL      : https://ftp.isc.org/isc/dhcp/4.4.1/dhcp-4.4.1.tar.gz
+Source0  : https://ftp.isc.org/isc/dhcp/4.4.1/dhcp-4.4.1.tar.gz
 Source1  : dhcp4.service
-Source99 : https://ftp.isc.org/isc/dhcp/4.4.0/dhcp-4.4.0.tar.gz.asc
+Source99 : https://ftp.isc.org/isc/dhcp/4.4.1/dhcp-4.4.1.tar.gz.asc
 Summary  : The Internet Systems Consortium (ISC) DHCP server
 Group    : Development/Tools
-License  : ISC
+License  : MPL-2.0
 Requires: dhcp-bin
 Requires: dhcp-config
 Requires: dhcp-doc
@@ -62,14 +62,14 @@ doc components for the dhcp package.
 
 
 %prep
-%setup -q -n dhcp-4.4.0
+%setup -q -n dhcp-4.4.1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1517679044
+export SOURCE_DATE_EPOCH=1525282414
 %configure --disable-static
 make
 
@@ -81,7 +81,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 check
 
 %install
-export SOURCE_DATE_EPOCH=1517679044
+export SOURCE_DATE_EPOCH=1525282414
 rm -rf %{buildroot}
 %make_install
 mkdir -p %{buildroot}/usr/lib/systemd/system
