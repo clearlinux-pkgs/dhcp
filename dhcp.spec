@@ -6,7 +6,7 @@
 #
 Name     : dhcp
 Version  : 4.4.1
-Release  : 20
+Release  : 21
 URL      : https://ftp.isc.org/isc/dhcp/4.4.1/dhcp-4.4.1.tar.gz
 Source0  : https://ftp.isc.org/isc/dhcp/4.4.1/dhcp-4.4.1.tar.gz
 Source1  : dhcp4.service
@@ -69,7 +69,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1525282414
+export SOURCE_DATE_EPOCH=1525699985
 %configure --disable-static
 make
 
@@ -81,21 +81,25 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 check
 
 %install
-export SOURCE_DATE_EPOCH=1525282414
+export SOURCE_DATE_EPOCH=1525699985
 rm -rf %{buildroot}
 %make_install
 mkdir -p %{buildroot}/usr/lib/systemd/system
 install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/dhcp4.service
+## make_install_append content
+mkdir -p %{buildroot}/usr/libexec/
+mv %{buildroot}/usr/bin/dhclient %{buildroot}/usr/libexec/dhclient
+## make_install_append end
 
 %files
 %defattr(-,root,root,-)
 
 %files bin
 %defattr(-,root,root,-)
-/usr/bin/dhclient
 /usr/bin/dhcpd
 /usr/bin/dhcrelay
 /usr/bin/omshell
+/usr/libexec/dhclient
 
 %files config
 %defattr(-,root,root,-)

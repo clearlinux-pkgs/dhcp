@@ -1,0 +1,2 @@
+mkdir -p %{buildroot}/usr/libexec/
+mv %{buildroot}/usr/bin/dhclient %{buildroot}/usr/libexec/dhclient
