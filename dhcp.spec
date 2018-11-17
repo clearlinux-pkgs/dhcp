@@ -6,7 +6,7 @@
 #
 Name     : dhcp
 Version  : 4.4.1
-Release  : 22
+Release  : 23
 URL      : https://ftp.isc.org/isc/dhcp/4.4.1/dhcp-4.4.1.tar.gz
 Source0  : https://ftp.isc.org/isc/dhcp/4.4.1/dhcp-4.4.1.tar.gz
 Source1  : dhcp4.service
@@ -14,9 +14,11 @@ Source99 : https://ftp.isc.org/isc/dhcp/4.4.1/dhcp-4.4.1.tar.gz.asc
 Summary  : The Internet Systems Consortium (ISC) DHCP server
 Group    : Development/Tools
 License  : MPL-2.0
-Requires: dhcp-bin
-Requires: dhcp-config
-Requires: dhcp-doc
+Requires: dhcp-bin = %{version}-%{release}
+Requires: dhcp-libexec = %{version}-%{release}
+Requires: dhcp-license = %{version}-%{release}
+Requires: dhcp-man = %{version}-%{release}
+Requires: dhcp-services = %{version}-%{release}
 BuildRequires : iproute2
 
 %description
@@ -29,36 +31,56 @@ putting all of the configuration into one place.
 %package bin
 Summary: bin components for the dhcp package.
 Group: Binaries
-Requires: dhcp-config
+Requires: dhcp-libexec = %{version}-%{release}
+Requires: dhcp-license = %{version}-%{release}
+Requires: dhcp-man = %{version}-%{release}
+Requires: dhcp-services = %{version}-%{release}
 
 %description bin
 bin components for the dhcp package.
 
 
-%package config
-Summary: config components for the dhcp package.
-Group: Default
-
-%description config
-config components for the dhcp package.
-
-
 %package dev
 Summary: dev components for the dhcp package.
 Group: Development
-Requires: dhcp-bin
-Provides: dhcp-devel
+Requires: dhcp-bin = %{version}-%{release}
+Provides: dhcp-devel = %{version}-%{release}
 
 %description dev
 dev components for the dhcp package.
 
 
-%package doc
-Summary: doc components for the dhcp package.
-Group: Documentation
+%package libexec
+Summary: libexec components for the dhcp package.
+Group: Default
+Requires: dhcp-license = %{version}-%{release}
 
-%description doc
-doc components for the dhcp package.
+%description libexec
+libexec components for the dhcp package.
+
+
+%package license
+Summary: license components for the dhcp package.
+Group: Default
+
+%description license
+license components for the dhcp package.
+
+
+%package man
+Summary: man components for the dhcp package.
+Group: Default
+
+%description man
+man components for the dhcp package.
+
+
+%package services
+Summary: services components for the dhcp package.
+Group: Systemd services
+
+%description services
+services components for the dhcp package.
 
 
 %prep
@@ -69,7 +91,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1525699985
+export SOURCE_DATE_EPOCH=1542487951
 %configure --disable-static
 make
 
@@ -81,15 +103,17 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 check
 
 %install
-export SOURCE_DATE_EPOCH=1525699985
+export SOURCE_DATE_EPOCH=1542487951
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/package-licenses/dhcp
+cp LICENSE %{buildroot}/usr/share/package-licenses/dhcp/LICENSE
 %make_install
 mkdir -p %{buildroot}/usr/lib/systemd/system
 install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/dhcp4.service
-## make_install_append content
+## install_append content
 mkdir -p %{buildroot}/usr/libexec/
 mv %{buildroot}/usr/bin/dhclient %{buildroot}/usr/libexec/dhclient
-## make_install_append end
+## install_append end
 
 %files
 %defattr(-,root,root,-)
@@ -99,11 +123,6 @@ mv %{buildroot}/usr/bin/dhclient %{buildroot}/usr/libexec/dhclient
 /usr/bin/dhcpd
 /usr/bin/dhcrelay
 /usr/bin/omshell
-/usr/libexec/dhclient
-
-%files config
-%defattr(-,root,root,-)
-/usr/lib/systemd/system/dhcp4.service
 
 %files dev
 %defattr(-,root,root,-)
@@ -117,10 +136,31 @@ mv %{buildroot}/usr/bin/dhclient %{buildroot}/usr/libexec/dhclient
 /usr/include/omapip/omapip_p.h
 /usr/include/omapip/result.h
 /usr/include/omapip/trace.h
+/usr/share/man/man3/dhcpctl.3
+/usr/share/man/man3/omapi.3
 
-%files doc
+%files libexec
 %defattr(-,root,root,-)
-%doc /usr/share/man/man1/*
-%doc /usr/share/man/man3/*
-%doc /usr/share/man/man5/*
-%doc /usr/share/man/man8/*
+/usr/libexec/dhclient
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/dhcp/LICENSE
+
+%files man
+%defattr(0644,root,root,0755)
+/usr/share/man/man1/omshell.1
+/usr/share/man/man5/dhclient.conf.5
+/usr/share/man/man5/dhclient.leases.5
+/usr/share/man/man5/dhcp-eval.5
+/usr/share/man/man5/dhcp-options.5
+/usr/share/man/man5/dhcpd.conf.5
+/usr/share/man/man5/dhcpd.leases.5
+/usr/share/man/man8/dhclient-script.8
+/usr/share/man/man8/dhclient.8
+/usr/share/man/man8/dhcpd.8
+/usr/share/man/man8/dhcrelay.8
+
+%files services
+%defattr(-,root,root,-)
+/usr/lib/systemd/system/dhcp4.service
