@@ -6,15 +6,17 @@
 #
 Name     : dhcp
 Version  : 4.4.1
-Release  : 23
+Release  : 24
 URL      : https://ftp.isc.org/isc/dhcp/4.4.1/dhcp-4.4.1.tar.gz
 Source0  : https://ftp.isc.org/isc/dhcp/4.4.1/dhcp-4.4.1.tar.gz
-Source1  : dhcp4.service
+Source1  : dhcp.tmpfiles
+Source2  : dhcp4.service
 Source99 : https://ftp.isc.org/isc/dhcp/4.4.1/dhcp-4.4.1.tar.gz.asc
 Summary  : The Internet Systems Consortium (ISC) DHCP server
 Group    : Development/Tools
 License  : MPL-2.0
 Requires: dhcp-bin = %{version}-%{release}
+Requires: dhcp-config = %{version}-%{release}
 Requires: dhcp-libexec = %{version}-%{release}
 Requires: dhcp-license = %{version}-%{release}
 Requires: dhcp-man = %{version}-%{release}
@@ -32,12 +34,21 @@ putting all of the configuration into one place.
 Summary: bin components for the dhcp package.
 Group: Binaries
 Requires: dhcp-libexec = %{version}-%{release}
+Requires: dhcp-config = %{version}-%{release}
 Requires: dhcp-license = %{version}-%{release}
 Requires: dhcp-man = %{version}-%{release}
 Requires: dhcp-services = %{version}-%{release}
 
 %description bin
 bin components for the dhcp package.
+
+
+%package config
+Summary: config components for the dhcp package.
+Group: Default
+
+%description config
+config components for the dhcp package.
 
 
 %package dev
@@ -53,6 +64,7 @@ dev components for the dhcp package.
 %package libexec
 Summary: libexec components for the dhcp package.
 Group: Default
+Requires: dhcp-config = %{version}-%{release}
 Requires: dhcp-license = %{version}-%{release}
 
 %description libexec
@@ -91,7 +103,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1542487951
+export SOURCE_DATE_EPOCH=1544055997
 %configure --disable-static
 make
 
@@ -103,13 +115,15 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 check
 
 %install
-export SOURCE_DATE_EPOCH=1542487951
+export SOURCE_DATE_EPOCH=1544055997
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/dhcp
 cp LICENSE %{buildroot}/usr/share/package-licenses/dhcp/LICENSE
 %make_install
 mkdir -p %{buildroot}/usr/lib/systemd/system
-install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/dhcp4.service
+install -m 0644 %{SOURCE2} %{buildroot}/usr/lib/systemd/system/dhcp4.service
+mkdir -p %{buildroot}/usr/lib/tmpfiles.d
+install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/tmpfiles.d/dhcp.conf
 ## install_append content
 mkdir -p %{buildroot}/usr/libexec/
 mv %{buildroot}/usr/bin/dhclient %{buildroot}/usr/libexec/dhclient
@@ -123,6 +137,10 @@ mv %{buildroot}/usr/bin/dhclient %{buildroot}/usr/libexec/dhclient
 /usr/bin/dhcpd
 /usr/bin/dhcrelay
 /usr/bin/omshell
+
+%files config
+%defattr(-,root,root,-)
+/usr/lib/tmpfiles.d/dhcp.conf
 
 %files dev
 %defattr(-,root,root,-)
