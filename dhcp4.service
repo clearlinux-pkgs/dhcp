@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/dhcpd -4 -d -cf /etc/dhcpd.conf
+ExecStart=/usr/bin/dhcpd -4 -f -cf /etc/dhcpd.conf
 
 [Install]
 WantedBy=multi-user.target

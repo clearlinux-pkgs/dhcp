@@ -6,12 +6,12 @@
 #
 Name     : dhcp
 Version  : 4.4.1
-Release  : 26
+Release  : 27
 URL      : https://ftp.isc.org/isc/dhcp/4.4.1/dhcp-4.4.1.tar.gz
 Source0  : https://ftp.isc.org/isc/dhcp/4.4.1/dhcp-4.4.1.tar.gz
 Source1  : dhcp.tmpfiles
 Source2  : dhcp4.service
-Source99 : https://ftp.isc.org/isc/dhcp/4.4.1/dhcp-4.4.1.tar.gz.asc
+Source3 : https://ftp.isc.org/isc/dhcp/4.4.1/dhcp-4.4.1.tar.gz.asc
 Summary  : The Internet Systems Consortium (ISC) DHCP server
 Group    : Development/Tools
 License  : MPL-2.0
@@ -36,7 +36,6 @@ Group: Binaries
 Requires: dhcp-libexec = %{version}-%{release}
 Requires: dhcp-config = %{version}-%{release}
 Requires: dhcp-license = %{version}-%{release}
-Requires: dhcp-man = %{version}-%{release}
 Requires: dhcp-services = %{version}-%{release}
 
 %description bin
@@ -56,6 +55,7 @@ Summary: dev components for the dhcp package.
 Group: Development
 Requires: dhcp-bin = %{version}-%{release}
 Provides: dhcp-devel = %{version}-%{release}
+Requires: dhcp = %{version}-%{release}
 
 %description dev
 dev components for the dhcp package.
@@ -102,20 +102,25 @@ services components for the dhcp package.
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1544055997
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1570770834
+export GCC_IGNORE_WERROR=1
+export CFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$CFLAGS -fno-lto "
+export FFLAGS="$CFLAGS -fno-lto "
+export CXXFLAGS="$CXXFLAGS -fno-lto "
 %configure --disable-static
 make
 
 %check
-export LANG=C
+export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 check
 
 %install
-export SOURCE_DATE_EPOCH=1544055997
+export SOURCE_DATE_EPOCH=1570770834
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/dhcp
 cp LICENSE %{buildroot}/usr/share/package-licenses/dhcp/LICENSE
