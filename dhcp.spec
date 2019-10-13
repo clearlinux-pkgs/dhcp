@@ -6,7 +6,7 @@
 #
 Name     : dhcp
 Version  : 4.4.1
-Release  : 27
+Release  : 28
 URL      : https://ftp.isc.org/isc/dhcp/4.4.1/dhcp-4.4.1.tar.gz
 Source0  : https://ftp.isc.org/isc/dhcp/4.4.1/dhcp-4.4.1.tar.gz
 Source1  : dhcp.tmpfiles
