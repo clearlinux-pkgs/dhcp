@@ -6,7 +6,7 @@
 #
 Name     : dhcp
 Version  : 4.4.2
-Release  : 34
+Release  : 35
 URL      : https://downloads.isc.org/isc/dhcp/4.4.2/dhcp-4.4.2.tar.gz
 Source0  : https://downloads.isc.org/isc/dhcp/4.4.2/dhcp-4.4.2.tar.gz
 Source1  : dhcp.tmpfiles
@@ -22,6 +22,7 @@ Requires: dhcp-license = %{version}-%{release}
 Requires: dhcp-man = %{version}-%{release}
 Requires: dhcp-services = %{version}-%{release}
 BuildRequires : iproute2
+Patch1: dhcp-fno-common.patch
 
 %description
 Dhcp includes the DHCP server which is used for dynamically configuring
@@ -98,17 +99,18 @@ services components for the dhcp package.
 %prep
 %setup -q -n dhcp-4.4.2
 cd %{_builddir}/dhcp-4.4.2
+%patch1 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1579721534
+export SOURCE_DATE_EPOCH=1589474082
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
-export FCFLAGS="$CFLAGS -fno-lto "
-export FFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$FFLAGS -fno-lto "
+export FFLAGS="$FFLAGS -fno-lto "
 export CXXFLAGS="$CXXFLAGS -fno-lto "
 %configure --disable-static
 make
@@ -121,7 +123,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 check
 
 %install
-export SOURCE_DATE_EPOCH=1579721534
+export SOURCE_DATE_EPOCH=1589474082
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/dhcp
 cp %{_builddir}/dhcp-4.4.2/LICENSE %{buildroot}/usr/share/package-licenses/dhcp/7e8baf46097aced825365d0bc6d756b3c32af28a
