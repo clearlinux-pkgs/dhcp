@@ -6,7 +6,7 @@
 #
 Name     : dhcp
 Version  : 4.4.2
-Release  : 37
+Release  : 38
 URL      : https://downloads.isc.org/isc/dhcp/4.4.2/dhcp-4.4.2.tar.gz
 Source0  : https://downloads.isc.org/isc/dhcp/4.4.2/dhcp-4.4.2.tar.gz
 Source1  : dhcp.tmpfiles
